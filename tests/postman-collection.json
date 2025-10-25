@@ -1,0 +1,170 @@
+{
+  "info": {
+    "name": "Google Login API",
+    "description": "Google 第三方登入後端 API 測試集合\n\n⚠️ 如果遇到 Postman 卡住問題:\n1. 檢查 Settings → Request timeout (建議 30000ms)\n2. 關閉 SSL certificate verification\n3. 檢查 Proxy 設定\n4. 使用 curl 或 VS Code REST Client 替代\n5. 參考 tests/api-test.http 檔案\n\n伺服器位址: http://localhost:4000\nToken 有效期: 3 分鐘",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_TOKEN_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. 測試 404 路由",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/test-not-found",
+          "host": ["{{baseUrl}}"],
+          "path": ["test-not-found"]
+        },
+        "description": "測試未定義的路由,應該回傳 404"
+      }
+    },
+    {
+      "name": "2. Google 登入導向",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/user/auth/google",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "auth", "google"]
+        },
+        "description": "會重導向到 Google 登入頁面。建議在瀏覽器中測試。"
+      }
+    },
+    {
+      "name": "3. 取得個人資料 (無 Token)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/user/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "profile"]
+        },
+        "description": "測試無 Token 訪問,應該回傳 401 Unauthorized"
+      }
+    },
+    {
+      "name": "4. 取得個人資料 (有 Token)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "profile"]
+        },
+        "description": "取得當前登入使用者的個人資料。請先設定 token 變數。"
+      }
+    },
+    {
+      "name": "5. 更新 Token (Refresh)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/refresh",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "refresh"]
+        },
+        "description": "更新 Token。即使 token 過期也可以使用。"
+      }
+    },
+    {
+      "name": "6. 登出 (當前裝置)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/logout",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "logout"]
+        },
+        "description": "登出當前裝置,會從使用者的 tokens 陣列中移除當前 token。"
+      }
+    },
+    {
+      "name": "7. 登出 (所有裝置)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/logout/all",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "logout", "all"]
+        },
+        "description": "登出所有裝置,會清空使用者的所有 tokens。"
+      }
+    },
+    {
+      "name": "8. 測試無效的 Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer invalid_token_here",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/user/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["user", "profile"]
+        },
+        "description": "測試使用無效 token,應該回傳 401 並顯示 'jwt malformed'"
+      }
+    }
+  ]
+}

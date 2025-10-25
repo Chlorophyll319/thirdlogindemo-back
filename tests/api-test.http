@@ -1,0 +1,58 @@
+### API 測試檔案
+### 使用方式: 安裝 VS Code 的 "REST Client" 擴充套件後,點擊 "Send Request" 即可測試
+
+@baseUrl = http://localhost:4000
+# 請將下方的 token 替換成你的真實 token
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGZjOTYzYmI5OTlkOGU1OWQ1Mzk5NTYiLCJpYXQiOjE3NjEzODUzMjYsImV4cCI6MTc2MTM4NTUwNn0.JmTPwjPHkJpZyscNzExpNXUYtbeyANoTi4d7EKmCfrY
+
+###############################################
+# Google OAuth 登入流程
+###############################################
+
+### 1. 導向 Google 登入頁面
+# 注意: 這個需要在瀏覽器中開啟
+# GET {{baseUrl}}/user/auth/google
+
+
+###############################################
+# 受保護的 API (需要 JWT Token)
+###############################################
+
+### 2. 取得個人資料
+GET {{baseUrl}}/user/profile
+Authorization: Bearer {{token}}
+
+###############################################
+# Token 管理
+###############################################
+
+### 3. 更新 Token (Refresh)
+# 即使 token 過期也可以使用
+POST {{baseUrl}}/user/refresh
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###############################################
+# 登出功能
+###############################################
+
+### 4. 登出當前裝置
+# 只移除當前使用的 token
+POST {{baseUrl}}/user/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### 5. 登出所有裝置
+# 清空所有 tokens,所有裝置都會被登出
+POST {{baseUrl}}/user/logout/all
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###############################################
+# 測試用 (不需要 token)
+###############################################
+
+### 測試伺服器是否運行
+GET {{baseUrl}}/user/profile
+
+### 預期回應: 401 Unauthorized (因為沒有提供 token)

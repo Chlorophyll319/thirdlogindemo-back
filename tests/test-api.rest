@@ -1,0 +1,64 @@
+### 測試後端 API
+### 如果你使用 VS Code,安裝 "REST Client" 擴充套件後可以直接點擊 "Send Request" 來測試
+
+### 變數設定
+@baseUrl = http://localhost:4000
+@token = YOUR_TOKEN_HERE
+
+### ==========================================
+### 1. 測試未定義的路由 (應該回傳 404)
+### ==========================================
+GET {{baseUrl}}/test-not-found
+
+
+### ==========================================
+### 2. 測試 Google 登入導向 (會導向到 Google 登入頁面)
+### ==========================================
+GET {{baseUrl}}/user/auth/google
+
+
+### ==========================================
+### 3. 測試取得個人資料 (需要先有 token)
+### 說明: 你需要先完成 Google 登入流程,取得 token 後,
+###       把上面的 @token 變數替換成真實的 token
+### ==========================================
+GET {{baseUrl}}/user/profile
+Authorization: Bearer {{token}}
+
+
+### ==========================================
+### 4. 測試更新 Token (Refresh Token)
+### 說明: 即使 token 過期也可以使用此 API 更新 token
+### ==========================================
+POST {{baseUrl}}/user/refresh
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### ==========================================
+### 5. 測試登出 (需要有效的 token)
+### ==========================================
+POST {{baseUrl}}/user/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### ==========================================
+### 6. 測試登出所有裝置 (需要有效的 token)
+### ==========================================
+POST {{baseUrl}}/user/logout/all
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
+### ==========================================
+### 7. 測試無效的 token (應該回傳 401)
+### ==========================================
+GET {{baseUrl}}/user/profile
+Authorization: Bearer invalid_token_here
+
+
+### ==========================================
+### 8. 測試缺少 token (應該回傳 401)
+### ==========================================
+GET {{baseUrl}}/user/profile
