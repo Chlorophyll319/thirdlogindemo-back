@@ -1,19 +1,19 @@
-import js from "@eslint/js";
-import globals from "globals";
-import { defineConfig } from "eslint/config";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import js from '@eslint/js'
+import globals from 'globals'
+import { defineConfig } from 'eslint/config'
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
 export default defineConfig([
   {
-    files: ["**/*.{js,mjs,cjs}"],
+    files: ['**/*.{js,mjs,cjs}'],
     plugins: { js },
-    extends: ["js/recommended"],
+    extends: ['js/recommended'],
   },
-  { files: ["**/*.{js,mjs,cjs}"], languageOptions: { globals: globals.node } },
+  { files: ['**/*.{js,mjs,cjs}'], languageOptions: { globals: globals.node } },
   eslintPluginPrettierRecommended,
   {
     rules: {
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
-]);
+])
