@@ -59,6 +59,15 @@ app.all(/.*/, (req, res) => {
 })
 
 // 監聽與啟動
-app.listen(4000, () => {
-  console.log('伺服器啟動')
+
+// app.listen(4000, () => {
+//   console.log('伺服器啟動')
+// })
+
+// GCP
+
+const PORT = process.env.PORT || 4000
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
