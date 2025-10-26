@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import passport from 'passport'
+import './passport.js'
 
 // 引入 Passport 配置
 import './passport.js'
@@ -29,12 +30,7 @@ const app = express()
 app.use(express.json())
 
 // 使用 CORS 中介軟體（處理跨域請求）
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true,
-  }),
-)
+app.use(cors())
 
 // 🔐 初始化 Passport
 app.use(passport.initialize())

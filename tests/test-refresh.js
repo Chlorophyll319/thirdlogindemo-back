@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import User from './models/user.js'
+import User from '../models/user.js'
 
 // 連接資料庫
 await mongoose.connect(process.env.MONGODB_URI)
@@ -18,7 +18,7 @@ try {
       googleId: 'test-google-id-123',
       displayName: 'Test User',
       avatar: '',
-      tokens: []
+      tokens: [],
     })
     console.log('✅ 測試用戶建立成功')
   } else {
@@ -27,7 +27,7 @@ try {
 
   // 2. 生成一個新的 token
   const token = jwt.sign({ _id: testUser._id }, process.env.JWT_SECRET, {
-    expiresIn: '3m'
+    expiresIn: '3m',
   })
 
   // 3. 將 token 加入用戶的 tokens 陣列
@@ -61,7 +61,6 @@ try {
     console.log(`\n⚠️  警告: 此用戶有 ${testUser.tokens.length} 個 tokens,可能影響查詢效能`)
     console.log('建議定期清理過期的 tokens')
   }
-
 } catch (error) {
   console.error('❌ 測試過程發生錯誤:', error)
 } finally {
